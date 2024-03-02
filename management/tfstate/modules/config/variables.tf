@@ -2,7 +2,7 @@ variable "account_map" {
   description = "map of account ids. must inclucde 'management' key, and a key for every tier (e.g. 'prod', '...')"
   type        = map(number)
   default = {
-    management = 471112865941
+    management = 891377375061
 
     # use account IDs for the appropriate shared-services account
     prod    = 123
@@ -12,7 +12,7 @@ variable "account_map" {
 
 variable "organization" {
   description = "organization or company name"
-  default     = "iceburg"
+  default     = "iceburg-devops"
 }
 
 variable "state_region" {
