@@ -55,6 +55,9 @@ groups = {
   support  = "support group"
 }
 
+management_groups         = ["admin", "prodeng"]
+management_permission_set = "operate"
+
 permission_sets = {
   admin   = "Read/Write Access to all resources."
   operate = "Operate Access to terraformed resources."

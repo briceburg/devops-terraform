@@ -34,6 +34,14 @@ variable "management_account_id" {
   type        = number
 }
 
+variable "management_groups" {
+  description = "groups allowed to access the management account"
+  type        = list(string)
+}
+variable "management_permission_set" {
+  description = "permission set given to groups allowed access to the management account"
+}
+
 variable "organization" {
   description = "organization or company name"
 }

@@ -40,6 +40,23 @@ module "users_and_groups" {
   users             = var.users
 }
 
+module "permissions" {
+  source = "./modules/permissions"
+
+  accounts                  = module.accounts.accounts
+  groups                    = module.users_and_groups.groups
+  instance_arn              = local.instance_arn
+  management_account_id     = var.management_account_id
+  management_groups         = var.management_groups
+  management_permission_set = var.management_permission_set
+  organization_id           = aws_organizations_organization.this.id
+
+  permission_sets        = var.permission_sets
+  permissions_by_account = var.permissions_by_account
+  permissions_by_group   = var.permissions_by_group
+  permissions_by_ou      = var.permissions_by_ou
+}
+
 
 
 

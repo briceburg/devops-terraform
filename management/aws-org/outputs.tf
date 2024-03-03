@@ -14,6 +14,10 @@ output "organization_id" {
   value = aws_organizations_organization.this.id
 }
 
+output "permissions" {
+  value = module.permissions
+}
+
 output "users" {
   value = module.users_and_groups.users
 }
