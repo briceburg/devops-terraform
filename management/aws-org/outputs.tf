@@ -1,5 +1,5 @@
-output "discovery" {
-  value = module.discovery
+output "accounts" {
+  value = { for id, a in module.accounts.accounts : id => a.name }
 }
 
 output "groups" {

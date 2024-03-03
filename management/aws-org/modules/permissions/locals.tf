@@ -64,7 +64,7 @@ locals {
   ])
 
   x_permissions_by_ou = flatten([for selector, perms in var.permissions_by_ou : [
-    for account in var.accounts : [
+    for account in var.accounts.accounts : [
       for x in perms : [
         for p in setproduct(x.groups, x.permission_sets) : {
           account        = account.name
@@ -80,4 +80,51 @@ locals {
     { for p in local.x_permissions_by_group : lower("${p.account}-${p.group}-${p.permission_set}") => p... },
     { for p in local.x_permissions_by_ou : lower("${p.account}-${p.group}-${p.permission_set}") => p... },
   )
+}
+
+#
+# service control policies
+# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_syntax.html
+# https://aws.amazon.com/blogs/security/how-to-control-access-to-aws-resources-based-on-aws-account-ou-or-organization/
+# https://aws.amazon.com/blogs/security/iam-share-aws-resources-groups-aws-accounts-aws-organizations/
+#
+
+locals {
+  service_control_policies = {
+    DenyBasicBadBehaviors = {
+      content = templatefile(
+        "${path.module}/policies/scp/DenyBasicBadBehaviors.tftpl",
+        {}
+      )
+      ou_selectors = [var.organization_name]
+    }
+
+    DenyUnsupportedInstanceTypes = {
+      content = templatefile(
+        "${path.module}/policies/scp/DenyUnsupportedInstanceTypes.tftpl",
+        { supported_types = var.supported_instance_types }
+      )
+      # match only notprod tiers. 
+      # TODO: do not hardcode this
+      ou_selectors = ["${var.organization_name}.notprod"]
+    }
+
+    DenyUnsupportedRegions = {
+      content = templatefile(
+        "${path.module}/policies/scp/DenyUnsupportedRegions.tftpl",
+        { supported_regions = var.supported_regions }
+      )
+      ou_selectors = [var.organization_name]
+    }
+  }
+
+  x_scp_attachments = flatten([
+    for scp_name, v in local.service_control_policies : [
+      for selector in v.ou_selectors : {
+        key         = "${scp_name}_${selector}"
+        scp_name    = scp_name
+        ou_selector = selector
+      }
+    ]
+  ])
 }

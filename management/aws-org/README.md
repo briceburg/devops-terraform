@@ -122,6 +122,8 @@ Currently, named AWS profiles are used to manage resources in target accounts an
 * enable RAM sharing https://docs.aws.amazon.com/ram/latest/userguide/getting-started-sharing.html#getting-started-sharing-orgs?icmpid=docs_orgs_console
 * enable tag policies https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html
 * enable VPC reachability analyzer https://us-east-1.console.aws.amazon.com/organizations/v2/home/services/VPC%20Reachability%20Analyzer
+* refactor `organization` -> `organization_name`
+* introduce cross-tier-denial SCP
 
 
 

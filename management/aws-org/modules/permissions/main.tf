@@ -29,7 +29,7 @@ resource "aws_ssoadmin_account_assignment" "x_permissions" {
   principal_id   = var.groups[each.value[0].group]
   principal_type = "GROUP"
 
-  target_id   = [for account_id, account in var.accounts : account_id if account.name == each.value[0].account][0]
+  target_id   = [for account_id, account in var.accounts.accounts : account_id if account.name == each.value[0].account][0]
   target_type = "AWS_ACCOUNT"
 }
 
@@ -52,5 +52,20 @@ resource "aws_ssoadmin_permission_set_inline_policy" "x_inline_policies" {
   permission_set_arn = aws_ssoadmin_permission_set.this[each.key].arn
 }
 
+#
+# service control policies (SCPs)
+#
 
+resource "aws_organizations_policy" "scp" {
+  for_each = local.service_control_policies
+  name     = each.key
+  content  = each.value.content
+  type     = "SERVICE_CONTROL_POLICY"
+}
+
+resource "aws_organizations_policy_attachment" "scp" {
+  for_each  = { for x in local.x_scp_attachments : x.key => x }
+  policy_id = aws_organizations_policy.scp[each.value.scp_name].id
+  target_id = var.accounts.ou_tree[each.value.ou_selector].id
+}
 

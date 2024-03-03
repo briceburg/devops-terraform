@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DenyLeaveOrganization",
+            "Effect": "Deny",
+            "Action": [
+                "organizations:LeaveOrganization"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyExternalSharing",
+            "Effect": "Deny",
+            "Action": [
+                "ram:CreateResourceShare",
+                "ram:UpdateResourceShare"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "ram:RequestedAllowsExternalPrincipals": "true"
+                }
+            }
+        }
+    ]
+}

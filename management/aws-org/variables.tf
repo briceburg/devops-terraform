@@ -97,6 +97,14 @@ variable "sso_start_url" {
   description = "Organization Start/Login URL"
 }
 
+variable "supported_instance_types" {
+  description = "allowed EC2 instance types"
+}
+
+variable "supported_regions" {
+  description = "allowed AWS regions"
+}
+
 variable "users" {
   description = "mapping of SSO users. key is user's email."
   type = map(object({

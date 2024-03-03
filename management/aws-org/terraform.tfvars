@@ -6,11 +6,13 @@ account_email = {
   domain = "iceburg.net"
   user   = "devops"
 }
-management_account_id = 891377375061
-organization          = "iceburg-devops"
-sso_region            = "us-east-2"
-sso_start_url         = "https://d-9a67708f86.awsapps.com/start"
-vcs_url               = "https://github.com/briceburg/devops-terraform.git"
+management_account_id    = 891377375061
+organization             = "iceburg-devops"
+sso_region               = "us-east-2"
+sso_start_url            = "https://d-9a67708f86.awsapps.com/start"
+supported_regions        = ["us-east-2", "us-west-2"]
+supported_instance_types = ["t2.micro", "t2.small"]
+vcs_url                  = "https://github.com/briceburg/devops-terraform.git"
 
 #
 # org entities
