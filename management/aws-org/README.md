@@ -29,7 +29,7 @@ workloads:
   - sandbox
 ```
 
-Modify [locals-accounts.tf](./local-accounts.tf) to suit your organization's needs and be sure to create [state buckets](../tfstate/) after the accounts have been provisioned.
+Modify [accounts.tf](./accounts.tf) to suit your organization's needs and be sure to create [state buckets](../tfstate/) after the accounts have been provisioned.
 
 
 ### Discovery
@@ -77,7 +77,7 @@ Currently, named AWS profiles are used to manage resources in target accounts an
   aws configure sso
   ```
 * Create the management tfstate bucket, following [management-state](../tfstate/README.md#usage) instructions.
-* Modify the [config module variables](./modules/config/variables.tf) to provide _default values_ matching your organization.
+* Modify the [terraform.tfvars](./terraform.tfvars) to provide _default values_ matching your organization. See [variables.tf](./variables.tf) for descriptions.
 * :tada: you can now run terraform in this repository! make desired changes to locals-*.tf and...
   ```sh
   terraform init
