@@ -14,3 +14,7 @@ sso_role_name = operate
 sso_session = iceburg
 sso_account_id = 590184134942
 sso_role_name = operate
+[profile notprod-network/operate]
+sso_session = iceburg
+sso_account_id = 851725648400
+sso_role_name = operate
