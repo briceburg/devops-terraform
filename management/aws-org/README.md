@@ -52,7 +52,7 @@ I recommend the account name be <org>-management, e.g. `iceburg-management` for 
 
 ### initial setup (bootstrapping)
 
-Currently, named AWS profiles are used to manage resources in target accounts and access state. When first starting out, an administrative user with appropriate profiles must be created. **This user and permission set will only be used for interacting with the management account to create the initial tfstate bucket and accounts**. Recommended procedure; 
+Currently, [named AWS profiles](../../README.md#named-profiles) are used to manage resources in target accounts and access state. When first starting out, an administrative user with appropriate profiles must be created. **This user and permission set will only be used for interacting with the management account to create the initial tfstate bucket and accounts**. Recommended procedure; 
 
 * Create `admin` _Group_ in IAM Identity Center.
 * Create `breakglass` _User_ in IAM Identity Center. 
@@ -110,20 +110,19 @@ Currently, named AWS profiles are used to manage resources in target accounts an
   After a successful import you can run `terraform apply` again.
 
 * After creating accounts, 
+  * appropriately configure [named AWS profiles](../../README.md#named-profiles).
   * be sure to add the [project-state](../tfstate/README.md#project-state) buckets.
   * apply the account baseline to each account -- TBD
-  * use an appropriate user and configure profiles -- TBD
-
-
+  
 
 ## TODO:
 
 * enable trusted access https://docs.aws.amazon.com/accounts/latest/reference/using-orgs-trusted-access.html
-* enable RAM sharing https://docs.aws.amazon.com/ram/latest/userguide/getting-started-sharing.html#getting-started-sharing-orgs?icmpid=docs_orgs_console
 * enable tag policies https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html
 * enable VPC reachability analyzer https://us-east-1.console.aws.amazon.com/organizations/v2/home/services/VPC%20Reachability%20Analyzer
 * refactor `organization` -> `organization_name`
 * introduce cross-tier-denial SCP
+* refactor AWS management account name + profile names to `aws-org-management` (no interpolation of org name)
 
 
 

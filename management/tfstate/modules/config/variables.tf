@@ -5,8 +5,8 @@ variable "account_map" {
     management = 891377375061
 
     # use account IDs for the appropriate shared-services account
-    prod    = 123
-    notprod = 123
+    prod    = 471112651335
+    notprod = 590184134942
   }
 }
 

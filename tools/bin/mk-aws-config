@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+log(){ echo "$*" >&2 ; }
+die(){ log "$*"; exit 1; }
+
+log "writing AWS config file to STDOUT, typically redirected to ~/.aws/config"
+log "this requires aws-cli-v2 to be installed!"
+
+cfg="$HOME/.local/state/mk-aws-config"
+prompt/cfg(){
+  local id="$1"
+  local default="$2"
+  [ -e "$id" ] || echo "$default" > "$id"
+  read -rp "$id? : " -i "$(cat "$id")" -e answer
+  echo "$answer" > "$id"
+  eval "$id=\"$answer\""
+}
+mkdir -p "$cfg" && cd "$_"
+prompt/cfg "sso_start_url" "https://d-9a67708f86.awsapps.com/start"
+prompt/cfg "sso_region"    "us-east-2"
+prompt/cfg "sso_session"   "iceburg"
+
+export AWS_CONFIG_FILE=$cfg/config
+echo "
+[sso-session $sso_session]
+sso_start_url = $sso_start_url
+sso_region = $sso_region
+sso_registration_scopes = sso:account:access
+" > "$AWS_CONFIG_FILE"
+
+# attempt to login to session
+log "attempting to login to AWS session '$sso_session' using command:"
+log "aws sso login --sso-session $sso_session"
+log "NOTE: use this same command to refresh your session."
+aws sso login --sso-session "$sso_session" >&2
+
+# grab access token
+credfile=$(ls -1t ~/.aws/sso/cache/*.json | head -n 1)
+token=$(jq -r '.accessToken' < "$credfile")
+
+# enumerate accounts
+aws sso list-accounts --region "$sso_region" --access-token "$token"
+

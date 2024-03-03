@@ -1,0 +1,22 @@
+# terraform ignores
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+
+# general ignores
+.DS_Store
+*.pyc
+*~
+\#*\#
+.\#*
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+.envrc
+.idea/
+.vscode/
+**/.tmp
+**/tmp

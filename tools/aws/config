@@ -1,0 +1,16 @@
+[sso-session iceburg]
+sso_start_url = https://d-9a6770b30c.awsapps.com/start
+sso_region = us-east-2
+sso_registration_scopes = sso:account:access
+[profile iceburg-management/operate]
+sso_session = iceburg
+sso_account_id = 891377375061
+sso_role_name = AdministratorAccess
+[profile prod-shared-services/operate]
+sso_session = iceburg
+sso_account_id = 471112651335
+sso_role_name = operate
+[profile notprod-shared-services/operate]
+sso_session = iceburg
+sso_account_id = 590184134942
+sso_role_name = operate
