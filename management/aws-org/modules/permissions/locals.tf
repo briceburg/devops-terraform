@@ -4,7 +4,6 @@ locals {
       managed = [
         "arn:aws:iam::aws:policy/AdministratorAccess"
       ]
-      inline = []
     }
     operate = {
       managed = [
@@ -12,7 +11,6 @@ locals {
         "arn:aws:iam::aws:policy/PowerUserAccess",
         "arn:aws:iam::aws:policy/IAMFullAccess",
       ]
-      inline = []
     }
     read = {
       managed = [
@@ -22,13 +20,26 @@ locals {
         "arn:aws:iam::aws:policy/job-function/Billing",
         "arn:aws:iam::aws:policy/SecurityAudit",
       ]
-      inline = [
-        templatefile("${path.module}/policies/read.tftpl", {
-          org_id = var.organization_id
-        })
-      ]
+      inline = templatefile("${path.module}/policies/read.tftpl", {
+        org_id = var.organization_id
+      })
     }
   }
+
+  x_inline_policies = {
+    for permission_set, policies in local.permission_set_policies : permission_set =>
+    policies.inline if trimspace(try(policies.inline, "")) != ""
+  }
+
+  x_managed_policies = flatten([
+    for permission_set, policies in local.permission_set_policies : [
+      for arn in policies.managed : {
+        key            = "${permission_set}_${regex(".*/(.*)$", arn)[0]}"
+        permission_set = permission_set
+        policy_arn     = arn
+      }
+    ]
+  ])
 
   x_permissions_by_account = flatten([for account, perms in var.permissions_by_account : [
     for x in perms : [
