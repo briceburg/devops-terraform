@@ -31,25 +31,27 @@ module "devops_network" {
   transit_network = module.default_network
 }
 
-# module "prefix_lists" {
-#   source = "../../modules/aws-prefix-lists"
+module "prefix_lists" {
+  source = "../../modules/aws-prefix-lists"
 
-#   prefix_list_map = {
-#     developers = {
-#       erika  = ["1.2.3.4/32", "2600:1700:500:8740::/64"]
-#       darlan = ["5.6.7.8/32"]
-#     }
-#     metabase = {
-#       # https://www.metabase.com/cloud/docs/ip-addresses-to-whitelist.html
-#       metabase = ["18.207.81.126/32", "3.211.20.157/32", "50.17.234.169/32"]
-#     }
-#   }
-# }
+  prefix_list_map = {
+    developers = {
+      erika  = ["1.2.3.4/32", "2600:1700:500:8740::/64"]
+      darlan = ["5.6.7.8/32"]
+    }
+    metabase = {
+      # https://www.metabase.com/cloud/docs/ip-addresses-to-whitelist.html
+      metabase = ["18.207.81.126/32", "3.211.20.157/32", "50.17.234.169/32"]
+    }
+  }
+}
 
 module "ram" {
   source = "../../modules/aws-ram-shares"
 
-  organization_name    = module.config.organization_name
-  tier                 = module.config.tier
+  organization_name = module.config.organization_name
+  tier              = module.config.tier
+
+  prefix_list_arns     = module.prefix_lists.arns
   transit_gateway_arns = [module.default_network.transit_gateway.arn]
 }
