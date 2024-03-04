@@ -52,6 +52,10 @@ module "ram" {
   organization_name = module.config.organization_name
   tier              = module.config.tier
 
-  prefix_list_arns     = module.prefix_lists.arns
+  prefix_list_arns = module.prefix_lists.arns
+  subnet_arns = flatten(concat(
+    [for s in ["intra", "private", "public"] : module.default_network.subnet_arns[s]],
+    [for s in ["intra", "private", "public"] : module.devops_network.subnet_arns[s]],
+  ))
   transit_gateway_arns = [module.default_network.transit_gateway.arn]
 }
