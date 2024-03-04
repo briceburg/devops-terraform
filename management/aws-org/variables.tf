@@ -50,7 +50,6 @@ variable "organization_trusted_services" {
   description = "WARNING: It is preferable to use CLI Tools/AWS Console for these. https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html"
   type        = list(string)
   default = [
-    "ram.amazonaws.com",
     "sso.amazonaws.com",
     #"cloudtrail.amazonaws.com",
     #"config.amazonaws.com",

@@ -4,3 +4,7 @@ output "networks" {
     devops  = module.devops_network
   }
 }
+
+output "ram" {
+  value = module.ram
+}

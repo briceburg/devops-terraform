@@ -22,6 +22,9 @@ resource "aws_organizations_organization" "this" {
   feature_set = "ALL"
 }
 
+# allow RAM shares within the organization
+resource "aws_ram_sharing_with_organization" "this" {}
+
 module "accounts" {
   source = "./modules/accounts"
 

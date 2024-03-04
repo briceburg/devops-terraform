@@ -1,3 +1,7 @@
+output "organization_name" {
+  value = var.organization_name
+}
+
 output "region" {
   value = var.network_region
 }

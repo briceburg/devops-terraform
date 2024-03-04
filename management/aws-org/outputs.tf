@@ -2,6 +2,13 @@ output "accounts" {
   value = { for id, a in module.accounts.accounts : id => a.name }
 }
 
+output "discovery" {
+  value = {
+    accounts_url = module.discovery.accounts_url
+    ou_paths_url = module.discovery.ou_paths_url
+  }
+}
+
 output "groups" {
   value = module.users_and_groups.groups
 }
