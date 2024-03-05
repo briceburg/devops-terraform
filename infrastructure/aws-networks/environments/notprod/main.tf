@@ -59,3 +59,4 @@ module "ram" {
   ))
   transit_gateway_arns = [module.default_network.transit_gateway.arn]
 }
+

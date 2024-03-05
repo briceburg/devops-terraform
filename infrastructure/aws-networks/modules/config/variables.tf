@@ -4,7 +4,7 @@ variable "organization_name" {
 }
 
 variable "network_region" {
-  description = "region for holding terraform state resources"
+  description = "region for network resources"
   default     = "us-east-2"
 }
 
