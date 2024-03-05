@@ -7,12 +7,7 @@ output "egress" {
 }
 
 output "id" {
-  value = aws_vpc.this.id
-  depends_on = [
-    # delay output until routes are usable
-    aws_route.private-outbound,
-    aws_route.public-outbound,
-  ]
+  value = var.id
 }
 
 output "lambda" {
@@ -49,4 +44,13 @@ output "subnets" {
 
 output "transit_gateway" {
   value = try(module.transit_gateway[0], null)
+}
+
+output "vpc_id" {
+  value = aws_vpc.this.id
+  depends_on = [
+    # delay output until routes are usable
+    aws_route.private-outbound,
+    aws_route.public-outbound,
+  ]
 }
