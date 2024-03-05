@@ -1,5 +1,5 @@
 module "discovery" {
-  source = "github.com/briceburg/devops-terraform-modules//aws-discovery"
+  source = "github.com/briceburg/devops-terraform-modules//aws-discovery" # TODO: use relative path
   registrations = {
     "networks/${var.id}" = {
       cidr            = module.config.vpc_cidr
