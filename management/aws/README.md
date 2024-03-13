@@ -137,7 +137,8 @@ Next, From your terminal that has [aws cli](https://aws.amazon.com/cli/) install
 
 * appropriately configure [named AWS profiles](../../README.md#named-profiles).
 * add the [project tfstate](../tfstate/README.md#project-state) buckets.
-* apply the account baseline to each account -- TBD
+* apply the account baseline to each account -- TODO
+* setup networks and deployment zones -- TODO
   
 Enjoy the a module ecosystem working together and please contribute back.
 

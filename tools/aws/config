@@ -1,28 +1,24 @@
 [sso-session iceburg]
-sso_start_url = https://d-9a6770b30c.awsapps.com/start
+sso_start_url = https://d-9a67706e62.awsapps.com/start
 sso_region = us-east-2
 sso_registration_scopes = sso:account:access
-[profile iceburg-management/operate]
+[profile aws-org-management/operate]
 sso_session = iceburg
-sso_account_id = 891377375061
+sso_account_id = 211125402636
 sso_role_name = AdministratorAccess
 [profile prod-shared-services/operate]
 sso_session = iceburg
-sso_account_id = 471112651335
+sso_account_id = 851725570879
 sso_role_name = operate
 [profile notprod-shared-services/operate]
 sso_session = iceburg
-sso_account_id = 590184134942
+sso_account_id = 381491926522
 sso_role_name = operate
 [profile notprod-network/operate]
 sso_session = iceburg
 sso_account_id = 851725648400
 sso_role_name = operate
-[profile prod-network/operate]
-sso_session = iceburg
-sso_account_id = 851725339024
-sso_role_name = operate
 [profile notprod-sandbox/operate]
 sso_session = iceburg
-sso_account_id = 471112808899
+sso_account_id = 730335645902 
 sso_role_name = operate
