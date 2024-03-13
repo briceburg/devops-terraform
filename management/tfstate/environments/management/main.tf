@@ -1,15 +1,14 @@
 module "config" {
   source = "../../modules/config"
-  tier   = basename(abspath(path.root))
 }
 
 provider "aws" {
-  allowed_account_ids = [module.config.account_id]
-  profile             = "iceburg-management/operate"
+  allowed_account_ids = [module.config.management_account_id]
+  profile             = "aws-org-management/operate"
   region              = module.config.region
 
   default_tags {
-    tags = module.config.tags
+    tags = merge({ Tier = "management" }, module.config.tags)
   }
 }
 
