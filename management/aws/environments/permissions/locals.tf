@@ -9,7 +9,7 @@ locals {
       groups = module.discovery.lookup_results[1].groups
       users  = module.discovery.lookup_results[1].users
     },
-    jsondecode(data.aws_s3_object.org_data.body)
+    module.org_data.org_data
   )
 }
 
