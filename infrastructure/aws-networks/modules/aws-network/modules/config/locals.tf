@@ -3,7 +3,7 @@ locals {
 
   #
   # CIDR reservations. 
-  # NOTE: a unique CIDR is required for routing through the transit gateway
+  # NOTE: a unique CIDR is required for routing through a transit gateway
   # TODO: these should come from a data source or IPAM (https://docs.aws.amazon.com/vpc/latest/ipam/what-it-is-ipam.html)
   #
   cidr = coalesce(var.cidr, try(local.cidr_reservations.by_id[var.network_id], local.cidr_reservations.default))
@@ -25,12 +25,5 @@ locals {
     }
     default = "10.255.0.0/20"
   }
-
-  # align with ranges of networks expected to route through transit gateways
-  # https://docs.aws.amazon.com/vpc/latest/tgw/transit-gateway-nat-igw.html#transit-gateway-nat-igw-nat-vpc-c-route-tables
-  allowed_transit_cidrs = [
-    "10.0.0.0/8",
-    "172.30.0.0/16",
-  ]
 }
 

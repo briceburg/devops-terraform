@@ -4,7 +4,7 @@ module "config" {
   availability_zones = var.availability_zones
   cidr               = var.cidr
   network_id         = var.id
-  routing            = var.routing
+  routing            = local.enable_tgw ? "transit" : "self"
 }
 
 resource "aws_vpc" "this" {
@@ -71,16 +71,16 @@ module "lambda" {
   vpc_id     = aws_vpc.this.id
 }
 
-module "transit_gateway" {
-  count  = var.enable_transit_gateway ? 1 : 0
-  source = "./modules/transit_gateway"
+module "ram_share" {
+  source = "github.com/briceburg/devops-terraform-modules//aws-ram-share"
+  count  = var.enable_sharing ? 1 : 0
 
-  allowed_transit_cidrs = module.config.allowed_transit_cidrs
-  id                    = var.id
-  public_route_table_id = local.route_tables.public[0]
-  stage                 = var.stage
-  subnet_ids            = [for subnet in aws_subnet.private : subnet.id]
-  vpc_id                = aws_vpc.this.id
+  name = "network-${var.id}-subnets"
+  resources = merge(
+    { for k, v in aws_subnet.intra : "intra-${k}" => v.arn },
+    { for k, v in aws_subnet.private : "private-${k}" => v.arn },
+    { for k, v in aws_subnet.public : "public-${k}" => v.arn },
+  )
 }
 
 

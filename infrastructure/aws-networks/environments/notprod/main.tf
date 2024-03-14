@@ -4,8 +4,7 @@ module "config" {
 }
 
 provider "aws" {
-
-  profile = "${module.config.tier}-network/operate"
+  profile = "notprod-network/operate"
   region  = module.config.region
 
   default_tags {
@@ -16,47 +15,39 @@ provider "aws" {
 module "default_network" {
   source = "../../modules/aws-network"
 
-  enable_transit_gateway = true
-  id                     = "default"
-  routing                = "self"
-  stage                  = "DEVELOPMENT"
+  id    = "default"
+  stage = "DEVELOPMENT"
+}
+
+module "default_network_tgw" {
+  source = "../../modules/aws-network-transit-gateway"
+
+  network = module.default_network
 }
 
 module "devops_network" {
   source = "../../modules/aws-network"
 
   id              = "devops"
-  routing         = "transit"
   stage           = "DEVELOPMENT"
-  transit_network = module.default_network
+  transit_gateway = module.default_network_tgw
 }
 
-module "prefix_lists" {
+module "prefix_lists" { # TODO: move to firewall terraform
   source = "../../modules/aws-prefix-lists"
 
-  prefix_list_map = {
+  managed_list_map = {
     developers = {
       erika  = ["1.2.3.4/32", "2600:1700:500:8740::/64"]
       darlan = ["5.6.7.8/32"]
     }
-    metabase = {
+    vendors = {
       # https://www.metabase.com/cloud/docs/ip-addresses-to-whitelist.html
       metabase = ["18.207.81.126/32", "3.211.20.157/32", "50.17.234.169/32"]
     }
+    vpns = {
+      azure-west = ["1.2.3.4/32"]
+    }
   }
-}
-
-module "ram" {
-  source = "../../modules/aws-ram-shares"
-
-  organization_name = module.config.organization_name
-  tier              = module.config.tier
-
-  prefix_list_arns = module.prefix_lists.arns
-  subnet_arns = flatten(concat(
-    [for s in ["intra", "private", "public"] : module.default_network.subnet_arns[s]],
-    [for s in ["intra", "private", "public"] : module.devops_network.subnet_arns[s]],
-  ))
-  transit_gateway_arns = [module.default_network.transit_gateway.arn]
 }
 

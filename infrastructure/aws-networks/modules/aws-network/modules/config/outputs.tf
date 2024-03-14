@@ -1,7 +1,3 @@
-output "allowed_transit_cidrs" {
-  value = local.allowed_transit_cidrs
-}
-
 output "vpc_availability_zones" {
   value = local.azs
 

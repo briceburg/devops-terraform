@@ -1,3 +1,4 @@
+# TODO: is it possible to use org-data for this before an initial provider is configured?
 variable "organization_name" {
   description = "organization or company name"
   default     = "iceburg-devops"

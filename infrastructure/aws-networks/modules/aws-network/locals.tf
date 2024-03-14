@@ -32,6 +32,7 @@ locals {
 }
 
 locals {
+  enable_tgw = var.transit_gateway == null ? false : true
   route_tables = {
     intra   = [aws_vpc.this.default_route_table_id]
     private = [for k, v in aws_route_table.private : v.id]
@@ -42,7 +43,7 @@ locals {
     private = [for subnet in aws_subnet.private : subnet.arn]
     public  = [for subnet in aws_subnet.public : subnet.arn]
   }
-  subnets = {
+  subnet_ids = {
     intra   = [for subnet in aws_subnet.intra : subnet.id]
     private = [for subnet in aws_subnet.private : subnet.id]
     public  = [for subnet in aws_subnet.public : subnet.id]

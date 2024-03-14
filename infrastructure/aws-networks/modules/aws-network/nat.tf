@@ -1,11 +1,7 @@
 locals {
   egress = {
-    ips      = var.routing == "transit" ? var.transit_network.egress.ips : [for eip in aws_eip.private-outbound : eip.public_ip]
-    gateways = var.routing == "transit" ? [var.transit_network.transit_gateway.id] : [for natgw in aws_nat_gateway.private-outbound : natgw.id]
-  }
-  eip_zones = {
-    transit = []
-    self    = contains(["PRODUCTION"], var.stage) ? module.config.vpc_availability_zones : [module.config.vpc_availability_zones[0]]
+    ips      = local.enable_tgw ? var.transit_gateway.egress.ips : [for eip in aws_eip.private-outbound : eip.public_ip]
+    gateways = local.enable_tgw ? [var.transit_gateway.id] : [for natgw in aws_nat_gateway.private-outbound : natgw.id]
   }
 }
 
@@ -20,15 +16,17 @@ resource "aws_internet_gateway" "this" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "this" {
-  count = var.routing == "transit" ? 1 : 0
+  count = local.enable_tgw ? 1 : 0
 
   subnet_ids         = [for subnet in aws_subnet.private : subnet.id]
-  transit_gateway_id = var.transit_network.transit_gateway.id
+  transit_gateway_id = var.transit_gateway.id
   vpc_id             = aws_vpc.this.id
 }
 
 resource "aws_eip" "private-outbound" {
-  for_each   = toset(local.eip_zones[var.routing])
+  for_each = toset(local.enable_tgw ? [] :
+    contains(["PRODUCTION"], var.stage) ? module.config.vpc_availability_zones : [module.config.vpc_availability_zones[0]]
+  )
   depends_on = [aws_internet_gateway.this]
   tags = {
     Name       = "${var.id}-outbound-${each.key}"
@@ -93,8 +91,8 @@ resource "aws_route" "private-outbound" {
   for_each               = aws_route_table.private
   route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = var.routing == "transit" ? null : try(aws_nat_gateway.private-outbound[each.key].id, local.egress.gateways[0])
-  transit_gateway_id     = var.routing == "transit" ? local.egress.gateways[0] : null
+  nat_gateway_id         = local.enable_tgw ? null : try(aws_nat_gateway.private-outbound[each.key].id, local.egress.gateways[0])
+  transit_gateway_id     = local.enable_tgw ? local.egress.gateways[0] : null
 }
 
 resource "aws_route_table_association" "private" {

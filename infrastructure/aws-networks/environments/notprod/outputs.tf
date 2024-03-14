@@ -1,10 +1,3 @@
-output "networks" {
-  value = {
-    default = module.default_network
-    devops  = module.devops_network
-  }
-}
-
-output "ram" {
-  value = module.ram
+output "default_network" {
+  value = module.default_network
 }
